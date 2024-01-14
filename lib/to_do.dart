@@ -1,9 +1,17 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-class To_Do_List extends StatelessWidget {
-  const To_Do_List({Key? key}) : super(key: key);
+class to_do_list extends StatefulWidget {
+  const to_do_list({Key? key}) : super(key: key);
+
+  @override
+  State<to_do_list> createState() => to_do_state();
+}
+
+class to_do_state extends State<to_do_list> {
+  TextEditingController newSentence = TextEditingController();
+  List<String> sentences = [];
+  List<bool> checkboxValues = [];
+  List<Color> textColors = [];
 
   @override
   Widget build(BuildContext context) {
@@ -13,221 +21,82 @@ class To_Do_List extends StatelessWidget {
         backgroundColor: const Color(0xff0140a28),
         leading: const Icon(Icons.menu),
         title: const Text("To Do List"),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            iconSize: 50,
-            icon: const CircleAvatar(
-              backgroundColor: Color(0xff321a70),
-              radius: 50,
-              child: Icon(Icons.add, size: 30, color: Colors.white),
-            ),
-          ),
-        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                color: Colors.grey[300],
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text("Search",
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ))
-                  ],
+      body: Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              width: 325,
+              child: TextFormField(
+                controller: newSentence,
+                decoration: const InputDecoration(
+                  labelText: "New Sentence",
+                  labelStyle: TextStyle(color: Color(0xff321a70)),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xff321a70))),
+                  prefixIcon: Icon(Icons.edit),
+                  prefixIconColor: Color(0xff321a70),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: false,
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: false,
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: false,
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: false,
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: true,
-                    activeColor: const Color(0xff321a70),
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    activeColor: const Color(0xff321a70),
-                    value: true,
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    activeColor: const Color(0xff321a70),
-                    value: true,
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    activeColor: const Color(0xff321a70),
-                    value: true,
-                    onChanged: (value) {
-                      print("Finished");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    "Finish my English Homework",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                  )
-                ],
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MaterialButton(
+              onPressed: () {
+                setState(() {
+                  sentences.add(newSentence.text);
+                  checkboxValues.add(false);
+                  textColors.add(const Color(0xff321a70));
+                  newSentence.clear();
+                });
+              },
+              color: const Color(0xff321a70),
+              textColor: Colors.white,
+              child: const Text('Submit'),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: sentences.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        value: checkboxValues[index],
+                        onChanged: (value) {
+                          setState(() {
+                            checkboxValues[index] = value!;
+                            if (value) {
+                              textColors[index] = Colors.grey;
+                            } else {
+                              textColors[index] = Color(0xff321a70);
+                            }
+                          });
+                        },
+                        activeColor: const Color(0xff321a70),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        sentences[index],
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: textColors[index]),
+                      )
+                    ],
+                  );
+                }),
+          ],
         ),
       ),
     );
