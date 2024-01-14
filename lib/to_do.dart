@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_flut_todo/database_helper.dart';
 
+import 'database_helper.dart';
 
 
 class ToDoList extends StatefulWidget {
@@ -72,6 +72,7 @@ class ToDoListState extends State<ToDoList> {
               onPressed: () async {
                 if (newSentenceController.text.isNotEmpty) {
                   await _addTask(newSentenceController.text);
+                  checkTable(newSentenceController.text);
                   newSentenceController.clear();
                 }
               },
@@ -110,5 +111,16 @@ class ToDoListState extends State<ToDoList> {
         ),
       ),
     );
+  }
+  Future<void> checkTable(String sentence) async {
+    await _loadTasks();
+
+    // Print table values to logs after adding a new todo
+    var db = await DatabaseHelper.instance.database;
+    var result = await db.query('todoItems');
+    print('Table Values:');
+    for (var row in result) {
+      print(row);
+    }
   }
 }

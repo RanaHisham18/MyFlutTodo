@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
+import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
@@ -25,9 +25,17 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE todoItems(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        sentence TEXT NOT NULL
+        sentence TEXT NOT NULL,
+        isCompleted INTEGER DEFAULT 0
       )
     ''');
+
+    // Print table structure to logs
+    var result = await db.rawQuery('PRAGMA table_info(todoItems)');
+    print('Table Structure:');
+    for (var column in result) {
+      print('${column['name']} ${column['type']}');
+    }
   }
 
   Future<int> addTodoItem(String sentence) async {
