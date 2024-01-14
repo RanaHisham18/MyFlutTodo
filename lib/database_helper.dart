@@ -39,4 +39,14 @@ class DatabaseHelper {
     final db = await instance.database;
     return await db.query('todoItems');
   }
+
+  Future<void> updateTaskStatus(int id, bool isCompleted) async {
+    final db = await instance.database;
+    await db.update(
+      'todoItems',
+      {'isCompleted': isCompleted ? 1 : 0}, // Assuming 'isCompleted' is stored as an integer (0 or 1)
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

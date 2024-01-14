@@ -1,17 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:my_flut_todo/database_helper.dart';
 
-class to_do_list extends StatefulWidget {
-  const to_do_list({Key? key}) : super(key: key);
+
+
+class ToDoList extends StatefulWidget {
+  const ToDoList({Key? key}) : super(key: key);
 
   @override
-  State<to_do_list> createState() => to_do_state();
+  State<ToDoList> createState() => ToDoListState();
 }
 
-class to_do_state extends State<to_do_list> {
-  TextEditingController newSentence = TextEditingController();
-  List<String> sentences = [];
-  List<bool> checkboxValues = [];
-  List<Color> textColors = [];
+class ToDoListState extends State<ToDoList> {
+  TextEditingController newSentenceController = TextEditingController();
+  List<Map<String, dynamic>> tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks();
+  }
+
+  Future<void> _loadTasks() async {
+    var dbTasks = await DatabaseHelper.instance.getTodoItems();
+    setState(() {
+      tasks = dbTasks;
+    });
+  }
+
+  Future<void> _addTask(String sentence) async {
+    await DatabaseHelper.instance.addTodoItem(sentence);
+    await _loadTasks();
+  }
+
+  Future<void> _toggleTaskStatus(int id, bool isCompleted) async {
+    await DatabaseHelper.instance.updateTaskStatus(id, isCompleted);
+    await _loadTasks();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,76 +50,62 @@ class to_do_state extends State<to_do_list> {
         width: double.infinity,
         child: Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Container(
               width: 325,
               child: TextFormField(
-                controller: newSentence,
+                controller: newSentenceController,
                 decoration: const InputDecoration(
-                  labelText: "New Sentence",
+                  labelText: "New Task",
                   labelStyle: TextStyle(color: Color(0xff321a70)),
                   border: OutlineInputBorder(),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xff321a70))),
+                    borderSide: BorderSide(color: Color(0xff321a70)),
+                  ),
                   prefixIcon: Icon(Icons.edit),
                   prefixIconColor: Color(0xff321a70),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             MaterialButton(
-              onPressed: () {
-                setState(() {
-                  sentences.add(newSentence.text);
-                  checkboxValues.add(false);
-                  textColors.add(const Color(0xff321a70));
-                  newSentence.clear();
-                });
+              onPressed: () async {
+                if (newSentenceController.text.isNotEmpty) {
+                  await _addTask(newSentenceController.text);
+                  newSentenceController.clear();
+                }
               },
               color: const Color(0xff321a70),
               textColor: Colors.white,
               child: const Text('Submit'),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: sentences.length,
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      Checkbox(
-                        value: checkboxValues[index],
-                        onChanged: (value) {
-                          setState(() {
-                            checkboxValues[index] = value!;
-                            if (value) {
-                              textColors[index] = Colors.grey;
-                            } else {
-                              textColors[index] = Color(0xff321a70);
-                            }
-                          });
-                        },
-                        activeColor: const Color(0xff321a70),
+                  bool isCompleted = tasks[index]['isCompleted'] == 1;
+                  return ListTile(
+                    leading: Checkbox(
+                      value: isCompleted,
+                      onChanged: (bool? value) {
+                        if (value != null) {
+                          _toggleTaskStatus(tasks[index]['id'], value);
+                        }
+                      },
+                    ),
+                    title: Text(
+                      tasks[index]['sentence'],
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: isCompleted ? Colors.grey : const Color(0xff321a70),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        sentences[index],
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: textColors[index]),
-                      )
-                    ],
+                    ),
                   );
-                }),
+                },
+              ),
+            ),
           ],
         ),
       ),
